@@ -108,11 +108,11 @@ def perform_tests(tests, file):
             success = False
             print("Test", i, "Unsuccessful.")
             print("On Input:")
-            print(str(inp))
+            print(inp)
             print("Expected:")
-            print('\t', oup)
+            print(oup)
             print("Got:")
-            print('\t', ans)
+            print(ans)
         i += 1
     return success
 
