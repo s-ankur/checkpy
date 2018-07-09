@@ -1,6 +1,6 @@
 from bs4 import BeautifulSoup
 from urllib.request import urlopen, Request
-import subprocess
+from subprocess import *
 import hashlib
 import os
 import logging
@@ -28,9 +28,8 @@ def try_to(f, args=None, kwargs=None, max_try=-1, exceptions=(KeyError, ValueErr
 
 
 def get_url():
-    problem_no = input("Enter Problemname: ")
-    Q = problem_no.split()
-    return r'http://codeforces.com/problemset/problem/%d/%c' % (Q[0], Q[1])
+    contest_no, problem_no = input("Enter Problem Name: ")
+    return r'http://codeforces.com/problemset/problem/%d/%c' % (int(contest_no), problem_no)
 
 
 def get_file_and_url():
@@ -55,7 +54,6 @@ def get_filename(url):
 
 def get_problem(url):
     file_name = get_filename(url)
-    problem_page = None
     if not os.path.isdir(CACHE_DIR):
         os.mkdir(CACHE_DIR)
     if os.path.isfile(file_name):
@@ -75,14 +73,14 @@ def get_problem(url):
 
 
 def clean_test(test):
-    return test.pre.decode_contents().replace('<br>', '/n')
+    return test.pre.decode_contents().replace(r'<br/>', '\n')
 
 
 def get_tests(problem_page):
     soup = BeautifulSoup(problem_page, 'html.parser')
     inputs = [clean_test(element) for element in soup.findAll('div', {'class': 'input'})]
-    outputs = [clean_test(element) for element in soup.findAll('div', {'class': 'input'})]
-    return inputs, outputs
+    outputs = [clean_test(element) for element in soup.findAll('div', {'class': 'output'})]
+    return list(zip(inputs, outputs))
 
 
 def run(inp, file):
@@ -100,29 +98,26 @@ def perform_tests(tests, file):
     i = 1
     success = True
     while tests:
-        inp = tests.pop(0).pre.decode_contents()
-        inp = inp.replace('<br/>', '\n')
-        oup = tests.pop(0).pre.decode_contents()
-        oup = oup.replace('<br/>', '\n')
-        oup = oup.strip()
-        oup = bytes(oup, 'ascii')
-        logging.info("Processing Test", i)
-        ans = run(inp, file)
+        inp, oup = tests.pop()
+        oup = oup.rstrip('\n')
+        print("Processing Test", i)
+        ans = run(inp, file).decode('ascii')
         if ans == oup:
-            logging.info("Test", i, "Successful.")
+            print("Test", i, "Successful.")
         else:
             success = False
-            logging.info("Test", i, "Unsuccessful.")
-            logging.info("On Input:")
-            logging.info(str(inp))
-            logging.info("Expected:")
-            logging.info(str(oup))
-            logging.info("Got:")
-            logging.info(str(ans))
+            print("Test", i, "Unsuccessful.")
+            print("On Input:")
+            print(str(inp))
+            print("Expected:")
+            print('\t', oup)
+            print("Got:")
+            print('\t', ans)
         i += 1
     return success
 
 
+'''
 def check():
     """
         Automated testcase Checking
@@ -131,19 +126,12 @@ def check():
         Reports wrong answers with specific information
         include a comment containing the url of the problem in a comment in source code
         for quicker testing
-        ### Added
-        > cacheing
-
-        ### TODO
-        > .EXE support pending
-        > cacheing improve check
-        > improve try_to
     """
-    submission, url = try_to(get_file_and_url, exceptions=(FileNotFoundError,))
-    problem_page = try_to(get_problem, [url])
-    tests = get_tests(problem_page)
-    success = perform_tests(tests, submission)
-
+'''
+submission, url = try_to(get_file_and_url, exceptions=(FileNotFoundError,))
+problem_page = try_to(get_problem, [url])
+tests = get_tests(problem_page)
+success = perform_tests(tests, submission)
 
 '''
     try:
@@ -157,5 +145,5 @@ def check():
 '''
 
 if __name__ == "__main__":
-    check()
+    # check()
     pass
