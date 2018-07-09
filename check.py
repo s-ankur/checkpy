@@ -117,7 +117,6 @@ def perform_tests(tests, file):
     return success
 
 
-'''
 def check():
     """
         Automated testcase Checking
@@ -127,23 +126,13 @@ def check():
         include a comment containing the url of the problem in a comment in source code
         for quicker testing
     """
-'''
-submission, url = try_to(get_file_and_url, exceptions=(FileNotFoundError,))
-problem_page = try_to(get_problem, [url])
-tests = get_tests(problem_page)
-success = perform_tests(tests, submission)
 
-'''
-    try:
-        while True:
-            check()
-            if  not input("Again ?(Y/N):").strip().lower()=='y':
-                break
-    except KeyboardInterrupt:
-        logging.info("\nExiting")
-   
-'''
+    submission, url = try_to(get_file_and_url, exceptions=(FileNotFoundError,))
+    problem_page = try_to(get_problem, [url])
+    tests = get_tests(problem_page)
+    return perform_tests(tests, submission)
+
 
 if __name__ == "__main__":
-    # check()
+    check()
     pass
