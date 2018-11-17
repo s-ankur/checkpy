@@ -13,7 +13,15 @@ else:
     CACHE_DIR = 'cache'
 
 
-def try_to(f, args=None, kwargs=None, max_try=-1, exceptions=(KeyError, ValueError), silent=True):
+def try_to(
+        f,
+        args=None,
+        kwargs=None,
+        max_try=-1,
+        exceptions=(
+            KeyError,
+            ValueError),
+        silent=True):
     if args is None:
         args = []
     if kwargs is None:
@@ -29,7 +37,8 @@ def try_to(f, args=None, kwargs=None, max_try=-1, exceptions=(KeyError, ValueErr
 
 def get_url():
     contest_no, problem_no = input("Enter Problem Name: ")
-    return r'http://codeforces.com/problemset/problem/%d/%c' % (int(contest_no), problem_no)
+    return r'http://codeforces.com/problemset/problem/%d/%c' % (
+        int(contest_no), problem_no)
 
 
 def get_file_and_url():
@@ -40,7 +49,9 @@ def get_file_and_url():
     if file_name.endswith('.py'):
         with open(file_name, 'r') as solution_file:
             source = solution_file.read()
-            urls = re.findall('http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+', source)
+            urls = re.findall(
+                r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+',
+                source)
             if urls:
                 url = urls[0]
     if not url:
@@ -49,7 +60,12 @@ def get_file_and_url():
 
 
 def get_filename(url):
-    return os.path.join('.cache', hashlib.sha1(bytes(str(url).casefold(), 'ascii')).hexdigest())
+    return os.path.join(
+        '.cache',
+        hashlib.sha1(
+            bytes(
+                str(url).casefold(),
+                'ascii')).hexdigest())
 
 
 def get_problem(url):
@@ -78,8 +94,10 @@ def clean_test(test):
 
 def get_tests(problem_page):
     soup = BeautifulSoup(problem_page, 'html.parser')
-    inputs = [clean_test(element) for element in soup.findAll('div', {'class': 'input'})]
-    outputs = [clean_test(element) for element in soup.findAll('div', {'class': 'output'})]
+    inputs = [clean_test(element)
+              for element in soup.findAll('div', {'class': 'input'})]
+    outputs = [clean_test(element)
+               for element in soup.findAll('div', {'class': 'output'})]
     return list(zip(inputs, outputs))
 
 
@@ -121,7 +139,7 @@ def check():
     """
         Automated testcase Checking
         Scrapes testcase from internet
-        runs sourcecode 
+        runs sourcecode
         Reports wrong answers with specific information
         include a comment containing the url of the problem in a comment in source code
         for quicker testing
