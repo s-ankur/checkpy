@@ -7,9 +7,9 @@ Reports wrong answers with specific information
 
 ## Usage:
 
-Launch the Program
+Launch the program<br>
 `python check.py`
 
-Enter the Filename and if needed the problem number.
+Enter the filename and if needed, the problem number.
 Hint: Include a comment containing the url of the problem in a comment in source code file so you dont have to enter the problem number.
 
