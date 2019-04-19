@@ -6,7 +6,7 @@ import os
 import logging
 import re
 import platform
-import sys 
+import sys
 
 if platform.system() == 'Linux':
     CACHE_DIR = r'.cache'
@@ -43,14 +43,14 @@ def get_url():
 
 
 def get_file_and_url():
-    if len(sys.argv)<2:
+    if len(sys.argv) < 2:
         file_name = input()
     else:
         file_name = sys.argv[1]
     if not os.path.isfile(file_name):
         raise FileNotFoundError
-    url =None
-    if len(sys.argv)>=4:
+    url = None
+    if len(sys.argv) >= 4:
         url = r'http://codeforces.com/problemset/problem/%s/%s' % (sys.argv[2], sys.argv[3])
     if not url and file_name.endswith('.py'):
         with open(file_name, 'r') as solution_file:
