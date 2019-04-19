@@ -6,6 +6,7 @@ import os
 import logging
 import re
 import platform
+import sys 
 
 if platform.system() == 'Linux':
     CACHE_DIR = r'.cache'
@@ -36,17 +37,22 @@ def try_to(
 
 
 def get_url():
-    contest_no, problem_no = input("Enter Problem Name: ")
+    contest_no, problem_no = input("Enter Problem Name: ").split()
     return r'http://codeforces.com/problemset/problem/%d/%c' % (
         int(contest_no), problem_no)
 
 
 def get_file_and_url():
-    file_name = input("Enter Filename: ")
+    if len(sys.argv)<2:
+        file_name = input()
+    else:
+        file_name = sys.argv[1]
     if not os.path.isfile(file_name):
         raise FileNotFoundError
-    url = None
-    if file_name.endswith('.py'):
+    url =None
+    if len(sys.argv)>=4:
+        url = r'http://codeforces.com/problemset/problem/%s/%s' % (sys.argv[2], sys.argv[3])
+    if not url and file_name.endswith('.py'):
         with open(file_name, 'r') as solution_file:
             source = solution_file.read()
             urls = re.findall(
@@ -144,7 +150,6 @@ def check():
         include a comment containing the url of the problem in a comment in source code
         for quicker testing
     """
-
     submission, url = try_to(get_file_and_url, exceptions=(FileNotFoundError,))
     problem_page = try_to(get_problem, [url])
     tests = get_tests(problem_page)
