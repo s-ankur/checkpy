@@ -7,7 +7,7 @@ Reports wrong answers with specific information
 ## Usage:
 
 Launch the program<br>
-`python check.py <contest number> <problem code>`
+`python check.py <contest number> <problem code>`<br>
 Eg:<br>
 `python check.py 114 A`
 Enter the filename and if needed, the problem number.
