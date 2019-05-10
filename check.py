@@ -95,7 +95,7 @@ def get_problem(url):
 
 
 def clean_test(test):
-    return test.pre.decode_contents().replace(r'<br/>', '\n')
+    return test.pre.decode_contents().replace(r'<br/>', '\n').strip()
 
 
 def get_tests(problem_page):
@@ -125,7 +125,7 @@ def perform_tests(tests, file):
         inp, oup = tests.pop()
         oup = oup.rstrip('\n')
         print("Processing Test", i)
-        ans = run(inp, file).decode('ascii')
+        ans = run(inp, file).decode('ascii').strip()
         if ans == oup:
             print("Test", i, "Successful.")
         else:
