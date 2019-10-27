@@ -144,7 +144,7 @@ def perform_tests(tests, file):
 def check():
     """
         Automated testcase Checking
-        Scrapes testcase from internet
+        Scrapes testcase from codeforces
         runs sourcecode
         Reports wrong answers with specific information
         include a comment containing the url of the problem in a comment in source code
